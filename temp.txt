@@ -1,0 +1,99 @@
+Тестовое задание
+
+Есть множество (массив, где порядок не важен) целых чисел в диапазоне от 1 до 300.
+
+Количество чисел - до 1000.
+
+Напишите функцию сериализации / десериализации в строку, чтобы итоговая строка была компактной.
+
+Цель задачи - максимально сжать данные относительно простой сериализации без алгоритма сжатия (хотя бы 50% в среднем).
+
+Сериализованная строка должна содержать только ASCII символы. Можно использовать любой язык программирования.
+
+Вместе с решением нужно прислать набор тестов  - исходная строка, сжатая строка, коэффициент сжатия.
+
+Примеры тестов: простейшие короткие, случайные - 50 чисел, 100 чисел, 500 чисел, 1000 чисел, граничные - все числа 1 знака, все числа из 2х знаков, все числа из 3х знаков, каждого числа по 3 - всего чисел 900.
+
+
+Example: 
+
+[0,1,2,3,1,2,3,4,2,3,4,5,3,4,5,6,4,5,6,7];
+
+Ordered:
+
+{value:[index,],value:[index,index],value:[index,index,index]};
+
+{0:[0],1:[1,4],2:[2,5,8],3:[3,6,9,12],4:[7,10,13,16],5:[11,14,17],6:[15,18],7:[19]};
+
+Unordered:
+
+{value:total,value:total,value:total};
+
+{'0':1,'1':2,'2':3,'3':4,'4':4,'5':3,'6':2,'7':1};
+
+Optimized:
+
+'0:1,1:2,2:3,3:4,4:4,5:3,6:2,7:1';
+
+without 1:
+
+'0,1:2,2:3,3:4,4:4,5:3,6:2,7';
+
+/*
+*
+* @param {Number} digits - Digits of numbers
+* @param {Number} amount - Amount of numbers
+* @returns {Array} Array of numbers
+*
+*/
+const source = (digits = 0, amount = 100) => {
+	const limit = (digits) => {
+		switch (digits) {
+			case 0: return 300;
+			case 1: return 9;
+			case 2: return 99;
+			case 3: return 999;
+			default: return 300;
+		};
+	};
+	const random = () => {
+		return Math.floor(Math.random() * limit(digits) + 1);
+	};
+	const create = (amount) => {
+		const result = [];
+		while (amount) {
+			amount -= 1;
+			result.push(random());
+		};
+		return result;
+	};
+	return create(amount);
+};
+
+/*
+*
+* @param {Number} amount - Amount of numbers,
+* @returns {Array} Array of numbers
+*
+*/
+const control = (amount = 90) => {
+	if (amount < 9) amount = 90;
+	const create = (amount) => {
+		let number = 1;
+		const result = [];
+		while (amount) {
+			amount -= 3;
+			result.push(number, number, number);
+			number += 1;
+		};
+		return result;
+	};
+	return create(amount);
+};
+
+// template for encoding / decoding of separate values
+const template = {
+  'keyval': {'1':'a','2':'b','3':'c','4':'d','5':'e','6':'f','7':'g','8':'h','9':'i'},
+  'valkey': {'a':'1','b':'2','c':'3','d':'4','e':'5','f':'6','g':'7','h':'8','i':'9'},
+};
+
