@@ -11,6 +11,10 @@ const optimalSerial1 = '0:1,1:2,2:3,3:4,4:4,5:3,6:2,7:1';
 */
 const optimalSerial2 = '0,1:2,2:3,3:4,4:4,5:3,6:2,7';
 
+// any duplicate values also should be optimized
+
+const optimalSerial3 = '1:0,7;2:1,6;3:2,5;4:3,4';
+
 /*
 *
 * @param {Number} digits - Digits of numbers
@@ -109,13 +113,17 @@ const serialize2 = (source) => {
     }
   };
   const compress = (serial) =>{
-    let result = '';
+    const prepare = {};
     for (let key in serial) {
-      if (serial[key] > 1) {
-        result += `${key}:${serial[key]},`;
+      if (Object.hasOwn(prepare, serial[key])) {
+        prepare[serial[key]] += `${key},`;
       } else {
-        result += `${key},`;
+        prepare[serial[key]] = `${key},`;
       }
+    }
+    let result = '';
+    for (let key in prepare) {
+      result += `${key}:${prepare[key].slice(0, -1)};`;
     }
     return result;
   };
