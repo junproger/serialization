@@ -82,7 +82,11 @@ const serialize1 = (source) => {
   const compress = (serial) =>{
     let result = '';
     for (let key in serial) {
-      result += `${key}:${serial[key]},`;
+      if (serial[key] > 1) {
+        result += `${key}:${serial[key]},`;
+      } else {
+        result += `${key},`;
+      }
     }
     return result;
   };
